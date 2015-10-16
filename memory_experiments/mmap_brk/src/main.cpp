@@ -7,9 +7,6 @@
 #include <sys/mman.h>
 #include <iostream>
 
-#define NUMINTS  (1000)
-#define FILESIZE (NUMINTS * sizeof(int))
-
 void print_data_end() {
     std::cout << "Current end " << sbrk(0) << "\n";
 }
