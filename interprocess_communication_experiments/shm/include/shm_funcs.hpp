@@ -16,9 +16,9 @@ inline int32_t get_shm(const char* name) {
         if (errno == EEXIST){
             close(fd);
             std::cout << "File existed, Opening as read write\n";
-            fd = shm_open("Shm_test", O_RDWR, S_IRUSR | S_IWUSR);
+            fd = shm_open(name, O_RDWR, S_IRUSR | S_IWUSR);
         } else {
-            fd = shm_open("Shm_test", O_CREAT|O_RDWR, S_IRUSR | S_IWUSR);
+            fd = shm_open(name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
             std::cout << "File did not exist, creating\n";
         }
     }
