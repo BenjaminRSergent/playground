@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <sys/mman.h>
 #include <iostream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 
 void print_data_end() {
     std::cout << "Current end " << sbrk(0) << "\n";
 }
 
-int main(int argc, char *argv[])
+int32_t main(int32_t argc, char *argv[])
 {
     print_data_end();
-    const int size = 100 * sizeof(int);
-    int fd = open("test_map", O_CREAT | O_RDWR);
+    const int32_t size = 100 * sizeof(int);
+    int32_t fd = open("test_map", O_CREAT | O_RDWR);
 
     print_data_end();
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     std::cout << "Wrote to mmap'd memory\n";
 
     srand(time(0));
-    int to_malloc = rand() % 1000;
+    int32_t to_malloc = rand() % 1000;
     std::cout << "Going to malloc " << to_malloc << "\n";
     int* memory = (int*)malloc(to_malloc);
     memory[10] = 1;
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     }
     
     if(argc < 2 || argv[1][0] == '0') {
-        int result = lseek(fd, size-1, SEEK_SET);
+        int32_t result = lseek(fd, size-1, SEEK_SET);
         if (result == -1) {
             close(fd);
             perror("Error calling lseek() to 'stretch' the file");
@@ -59,11 +59,11 @@ int main(int argc, char *argv[])
         }
         write(fd, "", 1);
 
-        for(int index = 0; index < size/sizeof(int); index++) {
+        for(int32_t index = 0; index < size/sizeof(int); index++) {
             map[index] = index * 2;                        
         }
     } else {
-        for(int index = 0; index < size/sizeof(int); index++) {
+        for(int32_t index = 0; index < size/sizeof(int); index++) {
             std::cout << "Reading: " << index << ": " << map[index] << "\n";
         }
     }
