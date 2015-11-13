@@ -10,8 +10,8 @@ int32_t main(int32_t argc, char *argv[]) {
 
     int32_t fd = shm_open("shm_test", O_CREAT|O_EXCL|O_RDWR, S_IRUSR | S_IWUSR);
 
-    if (fd < 0){
-        if (errno == EEXIST){
+    if (fd < 0) {
+        if (errno == EEXIST) {
             close(fd);
             std::cout << "File existed, Opening as read write\n";
             fd = shm_open("Shm_test", O_RDWR, S_IRUSR | S_IWUSR);
@@ -20,8 +20,8 @@ int32_t main(int32_t argc, char *argv[]) {
             std::cout << "File did not exist, creating\n";
         }
     }
-    
-    if (fd < 0){
+
+    if (fd < 0) {
         std::cout << "Error opening shared memory\n";
         exit(EXIT_FAILURE);
     }
@@ -43,7 +43,7 @@ int32_t main(int32_t argc, char *argv[]) {
         while(true) {
             for(int32_t index = 0; index < SIZE; index++) {
                 shared_memory[index] = cnt;
-            }   
+            }
             cnt++;
             usleep (250 * 1000); // 250 ms
         }

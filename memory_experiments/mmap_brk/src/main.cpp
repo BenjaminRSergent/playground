@@ -11,8 +11,7 @@ void print_data_end() {
     std::cout << "Current end " << sbrk(0) << "\n";
 }
 
-int32_t main(int32_t argc, char *argv[])
-{
+int32_t main(int32_t argc, char *argv[]) {
     print_data_end();
     const int32_t size = 100 * sizeof(int);
     int32_t fd = open("test_map", O_CREAT | O_RDWR);
@@ -45,11 +44,11 @@ int32_t main(int32_t argc, char *argv[])
     print_data_end();
 
     if (map == MAP_FAILED) {
-	    close(fd);
-	    perror("Error mmapping the file");
-	    exit(EXIT_FAILURE);
+        close(fd);
+        perror("Error mmapping the file");
+        exit(EXIT_FAILURE);
     }
-    
+
     if(argc < 2 || argv[1][0] == '0') {
         int32_t result = lseek(fd, size-1, SEEK_SET);
         if (result == -1) {
@@ -60,7 +59,7 @@ int32_t main(int32_t argc, char *argv[])
         write(fd, "", 1);
 
         for(int32_t index = 0; index < size/sizeof(int); index++) {
-            map[index] = index * 2;                        
+            map[index] = index * 2;
         }
     } else {
         for(int32_t index = 0; index < size/sizeof(int); index++) {
@@ -69,10 +68,10 @@ int32_t main(int32_t argc, char *argv[])
     }
 
     if (munmap(map, size) == -1) {
-	    perror("Error un-mmapping the file");
+        perror("Error un-mmapping the file");
     }
     if (munmap(anon, size) == -1) {
-	    perror("Error un-mmapping the file");
+        perror("Error un-mmapping the file");
     }
 
     close(fd);

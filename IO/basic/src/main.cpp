@@ -24,12 +24,12 @@ void write_stdout(const char* msg) {
     int fd = STDOUT_FILENO;
     int cloned_fd = dup(STDOUT_FILENO);
     write(fd, msg, strlen(msg));
-    
+
     std::cout << "About to close stdout\n";
     close(fd);
-    std::cout << "Writing after closing\n";    
+    std::cout << "Writing after closing\n";
     dup2(cloned_fd, fd);
-    std::cout << "Writing after reopeneing. The last message (Writing After Closing) shouldn't have appeared\n";   
+    std::cout << "Writing after reopeneing. The last message (Writing After Closing) shouldn't have appeared\n";
 }
 
 void read_all(const char* name) {
@@ -73,7 +73,7 @@ int32_t main(int32_t argc, char *argv[]) {
     read_stdin();
 
     int fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY);
-    
+
     write(file_name, "First Write", false);
     read_all(file_name);
     write(file_name, "Second", false);
@@ -83,12 +83,12 @@ int32_t main(int32_t argc, char *argv[]) {
 
     std::cout << "Truncating\n";
     truncate(file_name, 10);
-    
+
     read_all(file_name);
 
     std::cout << "Position write at 5\n";
-    const char* msg = "Test message";   
-    pwrite(fd, msg, strlen(msg), 5);    
+    const char* msg = "Test message";
+    pwrite(fd, msg, strlen(msg), 5);
     read_all(file_name);
 
     close(fd);

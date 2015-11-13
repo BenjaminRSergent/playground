@@ -5,7 +5,7 @@ int32_t main(int32_t argc, char *argv[]) {
 
     int32_t fd = get_shm(MEMORY_NAME);
 
-    if (fd < 0){
+    if (fd < 0) {
         std::cout << "Error opening shared memory\n";
         exit(EXIT_FAILURE);
     }

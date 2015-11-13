@@ -4,7 +4,7 @@ int32_t main(int32_t argc, char *argv[]) {
     const int32_t SIZE = 128;
 
     int32_t fd = get_shm(MEMORY_NAME);
-    if (fd < 0){
+    if (fd < 0) {
         std::cout << "Error opening shared memory\n";
         exit(EXIT_FAILURE);
     }
@@ -23,7 +23,7 @@ int32_t main(int32_t argc, char *argv[]) {
     while(true) {
         for(int32_t index = 0; index < MEMORY_SIZE; index++) {
             shared_memory[index] = cnt;
-        }   
+        }
         cnt++;
         usleep (250 * 1000); // 250 ms
     }
