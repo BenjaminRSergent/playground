@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
     val = ref_after;
     val_two = copy_after;
 
+    // Call the variadic function with the variadic lambda using the other lambda, initial_obj and double_add as arguments.
     auto ret = call_func(forwarding_lambda, call_double_ref_after_lambda, inital_obj, double_add);
 
     std::cout << "Operations expected:\n " << initial_val << " * " << std::sqrt(initial_val) << " = " << final_before_add << "\n";
