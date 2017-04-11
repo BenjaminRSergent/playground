@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     auto ret = call_func(forwarding_lambda, call_double_ref_after_lambda, inital_obj, double_add);
 
     std::cout << "Operations expected:\n " << initial_val << " * " << std::sqrt(initial_val) << " = " << final_before_add << "\n";
-    std::cout << final_before_add << " + " << double_add << " + " << ref_after << " = " << desired_result << "\n";
+    std::cout << final_before_add << " + " << double_add << " + " << ref_after << " + " << copy_initial << " = " << desired_result << "\n";
 
     std::cout << "Expect " << desired_result << ". Got: " << ret.get_val() << "\n";
     return EXIT_SUCCESS;
