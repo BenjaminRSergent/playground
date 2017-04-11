@@ -22,12 +22,13 @@ private:
     double _val;
 };
 
+// "square" a type (multiply operator with itself) and add some other type.
 template <typename __T, typename __U>
 decltype(auto) double_add_func(__T val, __U to_add) {
     return val * val + to_add;
 }
 
-// Call some function with a variable number of perfect forwarded arguments
+// variadic template function forwarding
 template <typename __FUNC, typename... __ARGS>
 decltype(auto) call_func(__FUNC&& func, __ARGS... args) {
     return func(std::forward<__ARGS>(args)...);
@@ -35,27 +36,34 @@ decltype(auto) call_func(__FUNC&& func, __ARGS... args) {
 
 int main(int argc, char** argv) {
     const auto desired_result = 33.5;
-    const auto ref_test = -100.0;
-    const auto ref_add = 1.5;
+    const auto ref_initial = -100.0;
+    const auto ref_after = 1.75;
+    const auto copy_initial = -0.25;
+    const auto copy_after = 100;
     const auto double_add = 5.0;
-    const auto final_before_add = desired_result - (ref_add + double_add);
+    const auto final_before_add = desired_result - (ref_after + double_add + copy_initial);
     const auto initial_val = final_before_add / std::pow(final_before_add, 2.0/6.0);
 
+    // placement new
     uint32_t memory[sizeof(weird_mul)];
     new (memory) weird_mul(initial_val);
     auto& inital_obj = *reinterpret_cast<weird_mul*>(memory);
 
-    auto my_lambda = [](
+    // variadic lambda forwarding
+    auto forwarding_lambda = [](
         auto&& func, auto&&... args) { return func(std::forward<decltype(args)>(args)...); };
 
-    auto val = ref_test;
-    auto call_double_add_val = [&val](auto&&... arg) { return double_add_func(std::forward<decltype(arg)>(arg)...) + val; };
-    val = ref_add;
+    // variadic lambda forwarding while adding a reference and copied value
+    auto val = ref_initial;
+    auto val_two = copy_initial;
+    auto call_double_ref_after_lambda = [&val, val_two](auto&&... arg) { return double_add_func(std::forward<decltype(arg)>(arg)...) + val + val_two; };
+    val = ref_after;
+    val_two = copy_after;
 
-    auto ret = call_func(my_lambda, call_double_add_val, inital_obj, double_add);
+    auto ret = call_func(forwarding_lambda, call_double_ref_after_lambda, inital_obj, double_add);
 
     std::cout << "Operations expected:\n " << initial_val << " * " << std::sqrt(initial_val) << " = " << final_before_add << "\n";
-    std::cout << final_before_add << " + " << double_add << " + " << ref_add << " = " << desired_result << "\n";
+    std::cout << final_before_add << " + " << double_add << " + " << ref_after << " = " << desired_result << "\n";
 
     std::cout << "Expect " << desired_result << ". Got: " << ret.get_val() << "\n";
     return EXIT_SUCCESS;
