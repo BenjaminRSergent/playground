@@ -22,11 +22,12 @@ private:
     double _val;
 };
 
-template <typename __T>
-decltype(auto) double_func(__T val) {
-    return val * val;
+template <typename __T, typename __U>
+decltype(auto) double_add_func(__T val, __U to_add) {
+    return val * val + to_add;
 }
 
+// Call some function with a variable number of perfect forwarded arguments
 template <typename __FUNC, typename... __ARGS>
 decltype(auto) call_func(__FUNC&& func, __ARGS... args) {
     return func(std::forward<__ARGS>(args)...);
@@ -45,10 +46,10 @@ int main(int argc, char** argv) {
     auto& inital_obj = *reinterpret_cast<weird_mul*>(memory);
 
     auto my_lambda = [](
-        auto&& func, auto&& arg, auto&& add) { return func(std::forward<decltype(arg)>(arg)) + add; };
+        auto&& func, auto&&... args) { return func(std::forward<decltype(args)>(args)...); };
 
     auto val = ref_test;
-    auto call_double_add_val = [&val](auto&& arg) { return double_func(std::forward<decltype(arg)>(arg)) + val; };
+    auto call_double_add_val = [&val](auto&&... arg) { return double_add_func(std::forward<decltype(arg)>(arg)...) + val; };
     val = ref_add;
 
     auto ret = call_func(my_lambda, call_double_add_val, inital_obj, double_add);
