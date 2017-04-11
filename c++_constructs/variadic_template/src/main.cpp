@@ -40,13 +40,18 @@ int main(int argc, char** argv) {
     const auto final_before_add = desired_result - (ref_add + double_add);
     const auto initial_val = final_before_add / std::pow(final_before_add, 2.0/6.0);
 
+    uint32_t memory[sizeof(weird_mul)];
+    new (memory) weird_mul(initial_val);
+    auto& inital_obj = *reinterpret_cast<weird_mul*>(memory);
 
     auto my_lambda = [](
         auto&& func, auto&& arg, auto&& add) { return func(std::forward<decltype(arg)>(arg)) + add; };
+
     auto val = ref_test;
     auto call_double_add_val = [&val](auto&& arg) { return double_func(std::forward<decltype(arg)>(arg)) + val; };
     val = ref_add;
-    auto ret = call_func(my_lambda, call_double_add_val, weird_mul(initial_val), double_add);
+
+    auto ret = call_func(my_lambda, call_double_add_val, inital_obj, double_add);
 
     std::cout << "Operations expected:\n " << initial_val << " * " << std::sqrt(initial_val) << " = " << final_before_add << "\n";
     std::cout << final_before_add << " + " << double_add << " + " << ref_add << " = " << desired_result << "\n";
