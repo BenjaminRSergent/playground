@@ -5,6 +5,11 @@ struct MakeMe {
 public:
     MakeMe(float floatNum, bool boolVal, std::string myString)
         : floatNum(floatNum), boolVal(boolVal), myString(myString) {
+        std::cout << "Called MakeMe constructor\n";
+    }
+
+    ~MakeMe() {
+        std::cout << "Called MakeMe destructor\n";
     }
     float floatNum;
     bool boolVal;
@@ -19,6 +24,8 @@ int main(int argc, char** argv) {
 
     std::cout << "Expect 2.7, 0, Hello World: " << makeMeCast->floatNum << ", " << makeMeCast->boolVal << ", "
               << makeMeCast->myString << "\n";
+
+     reinterpret_cast<MakeMe*>(test)->~MakeMe();
 
     return 0;
 }
